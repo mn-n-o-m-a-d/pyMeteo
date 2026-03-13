@@ -21,7 +21,7 @@ def update_weather(lat, lon, name):
 
 if __name__ == "__main__":
     update_weather(48.25, 16.36, "Wien")
-    update_weather(47.07, 15.43, "Graz")
+    update_weather(47.07, 15.44, "Graz")
     update_weather(47.50, 9.74, "Bregenz")
     update_weather(47.27, 11.40, "Innsbruck")
     update_weather(47.80, 13.03, "Salzburg")
