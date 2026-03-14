@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wetter Übersicht</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    fetch('Wien.json')
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById('temp').innerText = data.temperature + "°C";
-  });
+    <div class="weather-grid" id="weather-grid">
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

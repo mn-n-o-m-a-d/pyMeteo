@@ -1,31 +1,42 @@
 import requests
 import json
-import os
+import time
+import datetime
 
-def update_weather(lat, lon, name):
+def get_city_weather(lat, lon, name, timestamp):
     url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
 
     try:
         response = requests.get(url)
         data = response.json()
 
-        # file_path = "/var/www/html/weather.json"
-        file_path = f"/home/mn/VSCode/pyMeteo/{name}.json"
-
-        with open(file_path, "w") as f:
-            json.dump(data["current_weather"], f)
-
-        print("Weather data reloaded.")
+        return {
+            "name": name,
+            "temp": data["current_weather"]["temperature"],
+            "code": data["current_weather"]["weathercode"],
+            "timestamp": timestamp
+        }
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error at {name}: {e}")
+        return None
 
 if __name__ == "__main__":
-    update_weather(48.25, 16.36, "Wien")
-    update_weather(47.07, 15.44, "Graz")
-    update_weather(47.50, 9.74, "Bregenz")
-    update_weather(47.27, 11.40, "Innsbruck")
-    update_weather(47.80, 13.03, "Salzburg")
-    update_weather(48.31, 14.29, "Linz")
-    update_weather(48.20, 15.62, "StPölten")
-    update_weather(47.85, 16.52, "Eisenstadt")
-    update_weather(46.62, 14.31, "Klagenfurt")
+    cities = [
+        (48.25, 16.36, "Wien"), (47.07, 15.44, "Graz"), (47.50, 9.74, "Bregenz"),
+        (47.27, 11.40, "Innsbruck"), (47.80, 13.03, "Salzburg"), (48.31, 14.29, "Linz"),
+        (48.20, 15.62, "St. Pölten"), (47.85, 16.52, "Eisenstadt"), (46.62, 14.31, "Klagenfurt")
+    ]
+
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    all_weather = []
+    for lat, lon, name in cities:
+        weather = get_city_weather(lat, lon, name, now)
+        if weather:
+            all_weather.append(weather)
+        time.sleep(0.1)
+
+    with open ("/home/mn/VSCode/pyMeteo/frontend/austria_weather.json", "w") as f:
+        json.dump(all_weather, f)
+
+    print(f"{len(all_weather)} Cities updated.")
